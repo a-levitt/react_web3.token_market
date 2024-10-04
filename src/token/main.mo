@@ -18,5 +18,9 @@ actor Token {
         };
 
         return balance;
-    }
+    };
+
+    public query func getCurrency() : async Text {
+        return symbol;
+    };
 };

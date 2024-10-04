@@ -6,12 +6,16 @@ function Balance() {
 
   const [inputValue, setInput] = useState("");
   const [balanceResult, setBalance] = useState("");
-  
+  const [cryptoCurrency, setCurrency] = useState("");
+  const [isHidden, setHidden] = useState(true);
+
   async function handleClick() {
     // console.log(inputValue);
     const principal = Principal.fromText(inputValue);
     const balance = await token.balanceOf(principal);
     setBalance(balance.toLocaleString());
+    setCurrency(await token.getCurrency());
+    setHidden(false);
   };
 
 
@@ -35,7 +39,7 @@ function Balance() {
           Check Balance
         </button>
       </p>
-      <p>This account has a balance of {balanceResult}.</p>
+      <p hidden={isHidden}>This account has a balance of {balanceResult} {cryptoCurrency}.</p>
     </div>
   );
 }
