@@ -4,10 +4,12 @@ import { token } from "../../../declarations/token";
 function Faucet() {
 
   const [isDisabled, setDisabled] = useState(false);
+  const [buttonText, setButtonText] = useState("Claim");
 
   async function handleClick(event) {
     setDisabled(true);
-    await token.payOut();
+    const result = await token.payOut();
+    setButtonText(result);
     setDisabled(false);
   }
 
@@ -26,7 +28,7 @@ function Faucet() {
           onClick={handleClick}
           disabled={isDisabled}
           >
-          Gimme gimme
+          {buttonText}
         </button>
       </p>
     </div>
