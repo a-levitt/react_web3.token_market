@@ -1,5 +1,4 @@
 service : {
   balanceOf: (principal) -> (nat) query;
   getCurrency: () -> (text) query;
-  payOut: () -> (text);
 }

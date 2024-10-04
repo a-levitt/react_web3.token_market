@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
+import { token } from "../../../declarations/token";
 
 function Faucet() {
 
-  async function handleClick(event) {
+  const [isDisabled, setDisabled] = useState(false);
 
+  async function handleClick(event) {
+    setDisabled(true);
+    await token.payOut();
+    setDisabled(false);
   }
 
   return (
@@ -16,7 +21,11 @@ function Faucet() {
       </h2>
       <label>Get your free A-Levitt tokens here! Claim 10,000 ALVTT coins to your account.</label>
       <p className="trade-buttons">
-        <button id="btn-payout" onClick={handleClick}>
+        <button 
+          id="btn-payout" 
+          onClick={handleClick}
+          disabled={isDisabled}
+          >
           Gimme gimme
         </button>
       </p>
