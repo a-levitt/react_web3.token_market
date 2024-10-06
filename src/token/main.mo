@@ -2,14 +2,16 @@ import Principal "mo:base/Principal";
 import HashMap "mo:base/HashMap";
 import Nat "mo:base/Nat";
 import Debug "mo:base/Debug";
+import Iter "mo:base/Iter";
 
 actor Token {
-    var owner : Principal = Principal.fromText("uy356-dzm46-miel6-z3hk5-hd2zo-5yupb-otqgc-xb5ct-lltgt-ha47g-2ae");
-    var totalSupply : Nat = 1000000000;
-    var symbol : Text = "ALVTT";
+    let owner : Principal = Principal.fromText("uy356-dzm46-miel6-z3hk5-hd2zo-5yupb-otqgc-xb5ct-lltgt-ha47g-2ae");
+    let totalSupply : Nat = 1000000000;
+    let symbol : Text = "ALVTT";
 
-    var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
-    balances.put(owner, totalSupply);
+    private stable var balanceEntries: [(Principal, Nat)] = [];
+    private var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
+    
 
     public query func balanceOf(who: Principal) : async Nat {
 
@@ -50,6 +52,18 @@ actor Token {
             return "Success";
         } else {
             return "Not enough tokens to transfer";
+        }
+    };
+
+    system func preupgrade() {
+        balanceEntries :=  Iter.toArray(balances.entries());
+    };
+
+    system func postupgrade() {
+        balances := HashMap.fromIter<Principal, Nat>(balanceEntries.vals(), 1, Principal.equal, Principal.hash);
+    
+        if (balances.size() < 1) {
+            balances.put(owner, totalSupply);
         }
     };
 
