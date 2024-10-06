@@ -15,7 +15,7 @@ const init = async () => {
       onSuccess: () => {
         handleAuthenticated(authClient);
       }
-    })
+    });
   }
   
 }
